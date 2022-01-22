@@ -1,2 +1,2 @@
 # softex
-Repository to gain software experience and solve technical problems
+Repo to gain software experience and solve technical problems
