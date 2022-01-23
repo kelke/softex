@@ -27,7 +27,7 @@ def checkrepeat(rep):
 
     found = False
     for startdigit in range(1,101):
-        for groupsize in range (1,1001):
+        for groupsize in range (1,2001):
             groups = split(rep,groupsize, startdigit)
             if not groups:
                 break
@@ -48,7 +48,7 @@ def checkrepeat(rep):
         #print("No repeat found")
         return rep, 0, 0, 0
 
-de.getcontext().prec = 1200
+de.getcontext().prec = 2200
 is_int = False
 dividend = ""
 divisor = ""
