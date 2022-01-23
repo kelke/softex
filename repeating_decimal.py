@@ -4,7 +4,7 @@ def split(x, n, s):     # returns a list of possibe repeat numbers.
     #x is input number  example: 0.181818
     #n is repeat length example: 2 = 0. 18 18 18
     #s is start-digit   example: 2 = 0.1 81 81 81
-    groups = 2      # how many times to check repeat number within input number
+    groups = 3      # how many times to check repeat number within input number
     s += 1          # first digit after fraction is r[2]
 
     i, r = divmod(x,1)
@@ -45,18 +45,32 @@ def checkrepeat(rep):
                 for i in range(len(groups)):
                     s += " | "+groups[i]
                 print("Repeat number: "+str(rep)[:startdigit+1]+s)
-                break
-        if found:
-            break
+                return rep, startdigit, groupsize
     if not found:
         print("No repeat found")
+        return rep, 0, 0
 
-de.getcontext().prec = 100
+de.getcontext().prec = 200
 #dividend = int(input("Please enter Dividend: "))
 #divisor = int(input("Please enter Divisor: "))
 
+br = 0
+brnumber = 0
+bri = 0
+brj = 0
 for i in range(1,101):
     for j in range(1,101):
         rn = de.Decimal(i) / de.Decimal(j)
-        checkrepeat(rn)
+        r, s, repeat = checkrepeat(rn)
+        if repeat > br:
+            br = repeat
+            brnumber = r
+            bri = i
+            brj = j
 
+print()
+print("biggest repeat number:")
+print("Dividend: "+str(bri))
+print("Divisor: "+str(brj))
+print("Quotient: "+str(brnumber))
+print("with a repeat size of: "+str(br))
