@@ -22,21 +22,14 @@ def split(x, n, s):     # returns a list of possibe repeat numbers.
     #print("Possible repeat outputs"+ol)
     return ol
 
-de.getcontext().prec = 100
-dividend = int(input("Please enter Dividend: "))
-divisor = int(input("Please enter Divisor: "))
-
-rep = de.Decimal(dividend) / de.Decimal(divisor)
-pr = split(rep, 2, 2)
-print(pr)
-
-if isinstance(dividend, int) and isinstance(divisor, int):
-    rep = de.Decimal(dividend) / de.Decimal(divisor)
+def checkrepeat(rep):
+    #if isinstance(dividend, int) and isinstance(divisor, int):
+    #rep = de.Decimal(dividend) / de.Decimal(divisor)
     print("Input number: "+str(rep))
 
     found = False
-    for startdigit in range(1,11):
-        for groupsize in range (1,11):
+    for startdigit in range(1,51):
+        for groupsize in range (1,51):
             groups = split(rep,groupsize, startdigit)
             if not groups:
                 break
@@ -47,7 +40,7 @@ if isinstance(dividend, int) and isinstance(divisor, int):
                     equalgroups += 1
             if equalgroups == len(groups):
                 found = True
-                print("Found repeat at following amount of digits: "+str(groupsize))
+                print("Found repeat at: "+str(startdigit)+" digits after fraction; repeat size: "+str(groupsize))
                 s = ""
                 for i in range(len(groups)):
                     s += " | "+groups[i]
@@ -55,5 +48,15 @@ if isinstance(dividend, int) and isinstance(divisor, int):
                 break
         if found:
             break
-if not found:
-    print("No repeat found")
+    if not found:
+        print("No repeat found")
+
+de.getcontext().prec = 100
+#dividend = int(input("Please enter Dividend: "))
+#divisor = int(input("Please enter Divisor: "))
+
+for i in range(1,101):
+    for j in range(1,101):
+        rn = de.Decimal(i) / de.Decimal(j)
+        checkrepeat(rn)
+
