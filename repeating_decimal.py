@@ -30,28 +30,30 @@ rep = de.Decimal(dividend) / de.Decimal(divisor)
 pr = split(rep, 2, 2)
 print(pr)
 
-if isinstance(dividend, int) and isinstance(divisor, int) and False:
+if isinstance(dividend, int) and isinstance(divisor, int):
     rep = de.Decimal(dividend) / de.Decimal(divisor)
     print("Input number: "+str(rep))
 
     found = False
-    #for startdigit in range
-    for groupsize in range (1,11):
-        groups = split(rep,groupsize)
-        if not groups:
+    for startdigit in range(1,11):
+        for groupsize in range (1,11):
+            groups = split(rep,groupsize, startdigit)
+            if not groups:
+                break
+            equalgroups = 1
+            #print(len(groups))
+            for i in range(len(groups)-1):
+                if groups[i] == groups[i+1]:
+                    equalgroups += 1
+            if equalgroups == len(groups):
+                found = True
+                print("Found repeat at following amount of digits: "+str(groupsize))
+                s = ""
+                for i in range(len(groups)):
+                    s += " | "+groups[i]
+                print("Repeat number: "+str(rep)[:startdigit+1]+s)
+                break
+        if found:
             break
-        equalgroups = 1
-        #print(len(groups))
-        for i in range(len(groups)-1):
-            if groups[i] == groups[i+1]:
-                equalgroups += 1
-        if equalgroups == len(groups):
-            found = True
-            print("Found repeat at following amount of digits: "+str(groupsize))
-            s = ""
-            for i in range(len(groups)):
-                s += " | "+groups[i]
-            print("Repeat number: "+str(rep)[:2]+s)
-            break
-#if not found:
-print("No repeat found")
+if not found:
+    print("No repeat found")
