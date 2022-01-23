@@ -4,7 +4,7 @@ def split(x, n, s):     # returns a list of possibe repeat numbers.
     #x is input number  example: 0.181818
     #n is repeat length example: 2 = 0. 18 18 18
     #s is start-digit   example: 2 = 0.1 81 81 81
-    groups = 3      # how many times to check repeat number within input number
+    groups = 2      # how many times to check repeat number within input number
     s += 1          # first digit after fraction is r[2]
 
     i, r = divmod(x,1)
@@ -23,11 +23,11 @@ def split(x, n, s):     # returns a list of possibe repeat numbers.
     return ol
 
 def checkrepeat(rep):
-    print("Input number: "+str(rep))
+    #print("Input number: "+str(rep))
 
     found = False
-    for startdigit in range(1,51):
-        for groupsize in range (1,51):
+    for startdigit in range(1,101):
+        for groupsize in range (1,1001):
             groups = split(rep,groupsize, startdigit)
             if not groups:
                 break
@@ -38,40 +38,42 @@ def checkrepeat(rep):
                     equalgroups += 1
             if equalgroups == len(groups):
                 found = True
-                print("Found repeat at: "+str(startdigit)+" digits after fraction; repeat size: "+str(groupsize))
+                #print("Found repeat at: "+str(startdigit)+" digits after fraction; repeat size: "+str(groupsize))
                 s = ""
                 for i in range(len(groups)):
                     s += " | "+groups[i]
-                print("Repeat number: "+str(rep)[:startdigit+1]+s)
-                return rep, startdigit, groupsize
+                #print("Repeat number: "+str(rep)[:startdigit+1]+s)
+                return rep, startdigit, groupsize, groups[0]
     if not found:
-        print("No repeat found")
-        return rep, 0, 0
+        #print("No repeat found")
+        return rep, 0, 0, 0
 
-de.getcontext().prec = 200
-it_int = False
+de.getcontext().prec = 1200
+is_int = False
 dividend = ""
 divisor = ""
 try:
     dividend = int(input("Please enter Dividend: "))
     divisor = int(input("Please enter Divisor: "))
-    it_int = True
+    is_int = True
 except ValueError:
-    it_int = False
+    is_int = False
 
 
-if dividend == "0" and divisor == "0":
+if(dividend == 0 or dividend == "") or (divisor == 0 or divisor == ""):
     br = 0
     brnumber = 0
+    brgroup = 0
     bri = 0
     brj = 0
-    for i in range(1,101):
-        for j in range(1,101):
+    for i in range(1,21):
+        for j in range(1,1001):
             rn = de.Decimal(i) / de.Decimal(j)
-            r, s, repeat = checkrepeat(rn)
+            r, s, repeat, group = checkrepeat(rn)
             if repeat > br:
                 br = repeat
                 brnumber = r
+                brgroup = group
                 bri = i
                 brj = j
 
@@ -81,6 +83,7 @@ if dividend == "0" and divisor == "0":
     print("Divisor: "+str(brj))
     print("Quotient: "+str(brnumber))
     print("with a repeat size of: "+str(br))
+    print("Repeat: "+str(brgroup))
 elif is_int:
     rep = de.Decimal(dividend) / de.Decimal(divisor)
     checkrepeat(rep)
