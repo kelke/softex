@@ -23,8 +23,6 @@ def split(x, n, s):     # returns a list of possibe repeat numbers.
     return ol
 
 def checkrepeat(rep):
-    #if isinstance(dividend, int) and isinstance(divisor, int):
-    #rep = de.Decimal(dividend) / de.Decimal(divisor)
     print("Input number: "+str(rep))
 
     found = False
@@ -51,26 +49,41 @@ def checkrepeat(rep):
         return rep, 0, 0
 
 de.getcontext().prec = 200
-#dividend = int(input("Please enter Dividend: "))
-#divisor = int(input("Please enter Divisor: "))
+it_int = False
+dividend = ""
+divisor = ""
+try:
+    dividend = int(input("Please enter Dividend: "))
+    divisor = int(input("Please enter Divisor: "))
+    it_int = True
+except ValueError:
+    it_int = False
 
-br = 0
-brnumber = 0
-bri = 0
-brj = 0
-for i in range(1,101):
-    for j in range(1,101):
-        rn = de.Decimal(i) / de.Decimal(j)
-        r, s, repeat = checkrepeat(rn)
-        if repeat > br:
-            br = repeat
-            brnumber = r
-            bri = i
-            brj = j
 
-print()
-print("biggest repeat number:")
-print("Dividend: "+str(bri))
-print("Divisor: "+str(brj))
-print("Quotient: "+str(brnumber))
-print("with a repeat size of: "+str(br))
+if dividend == "0" and divisor == "0":
+    br = 0
+    brnumber = 0
+    bri = 0
+    brj = 0
+    for i in range(1,101):
+        for j in range(1,101):
+            rn = de.Decimal(i) / de.Decimal(j)
+            r, s, repeat = checkrepeat(rn)
+            if repeat > br:
+                br = repeat
+                brnumber = r
+                bri = i
+                brj = j
+
+    print()
+    print("biggest repeat number:")
+    print("Dividend: "+str(bri))
+    print("Divisor: "+str(brj))
+    print("Quotient: "+str(brnumber))
+    print("with a repeat size of: "+str(br))
+elif is_int:
+    rep = de.Decimal(dividend) / de.Decimal(divisor)
+    checkrepeat(rep)
+else:
+    print("Bad input, please enter two integers")
+
