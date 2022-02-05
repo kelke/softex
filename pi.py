@@ -21,15 +21,18 @@ def greglei(x): #amount of terms
 
 def nilakantha(repeats: int) -> dc():
     pi = 3
+    base = 2
 
-    for base in range (2, repeats*2, 2):
+    for i in range (1, repeats+1):
+        # print("+prod: "+str(prod)+" - base: "+str(base))
+        # pi += dc(4) / dc(prod)
+        # print("base: "+str(base))
+        base = i*2
         prod = base * (base +1) * (base +2)
-        pi += dc(4) / dc(prod)
-        print("base:")
-        print(base)
-        print("prod:")
-        print(prod)
-        print("")
+        if i % 2 == 0:
+            pi -= dc(4) / dc(prod)
+        else:
+            pi += dc(4) / dc(prod)
     return pi
 
 def write_to_file(content: str) -> None:
@@ -42,4 +45,4 @@ if __name__ == '__main__':
     loop = int(input("Input number of calculations: "))
     pi = nilakantha(loop)
     print(pi)
-    write_to_file(str(pi))
+    #write_to_file(str(pi))
