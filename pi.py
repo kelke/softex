@@ -23,6 +23,7 @@ def greglei(x): #amount of terms
 def nilakantha(repeats: int) -> dc():
     '''
         Nilakantha Series = 3 + 4/(2 + 3 + 4) - 4/(4 + 5 + 6) + 4/(6 + 7 + 8) - 4/(8 + 9 + 10)
+        using modulo
     '''
     pi = 3
     base = 2
@@ -36,6 +37,24 @@ def nilakantha(repeats: int) -> dc():
             pi += dc(4) / dc(prod)
     return pi
 
+def nilakantha2(repeats: int) -> dc():
+    '''
+        Nilakantha Series = 3 + 4/(2 + 3 + 4) - 4/(4 + 5 + 6) + 4/(6 + 7 + 8) - 4/(8 + 9 + 10)
+        using no modulo
+    '''
+    pi = 3
+    base = 2
+
+    for i in range (repeats):
+        prod = base * (base +1) * (base +2)
+        pi += dc(4) / dc(prod)
+        base += 1
+        
+        prod = base * (base +1) * (base +2)
+        pi -= dc(4) / dc(prod)
+        base += 1
+    return pi
+
 def write_to_file(content: str) -> None:
     f = open("test.txt", "w")
     f.write(content)
@@ -44,12 +63,11 @@ def write_to_file(content: str) -> None:
 if __name__ == '__main__':
     decimal.getcontext().prec = 1000
     loop = int(input("Input number of calculations: "))
+
     start = time.time()
-    
-    pi = nilakantha(loop)
-    
+    pi = nilakantha2(loop)
     end = time.time()
-    runtime = end - start
+
     print(str(pi)[:100])
     print(f"Runtime: {end - start}")
     #write_to_file(str(pi))
