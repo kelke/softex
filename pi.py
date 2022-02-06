@@ -18,14 +18,16 @@ def nilakantha(repeats: int) -> d():
     '''
     pi = 3
     base = 2
-
+    switch = True
+    
     for i in range (1, (repeats+1)*2):
         base = i*2
         prod = base * (base +1) * (base +2)
-        if i % 2 == 0:
-            pi -= d(4) / d(prod)
-        else:
+        if switch:
             pi += d(4) / d(prod)
+        else:
+            pi -= d(4) / d(prod)
+        switch = not switch
     return pi
 
 def nilakantha_unlim():
@@ -39,7 +41,7 @@ def nilakantha_unlim():
         switch = True
         i = 0
         loops = 0
-        stopafter = 100000
+        stopafter = 500000
         while True:
             for i in range(stopafter):
                 prod = base * (base +1) * (base +2)
@@ -78,21 +80,23 @@ def compare_string_to_file(string: str, filename: str) -> int:
 if __name__ == '__main__':
     #gc().prec = 20000
     #loop = int(input("Input number of calculations: "))
-    #loop = 800000  #for runtime testing amount of loops stay same
+    loop = 10000000  #for runtime testing amount of loops stay same
 
     precision = 500
     gc().prec = precision
-    start = time.time()
 
-    #pi = nilakantha(10000000)
+    start = time.time()
+    #pi = nilakantha(loop)
     pi, loops = nilakantha_unlim()
     end = time.time()
+    runtime = end - start
+    runtime = str(runtime)
     pi = str(pi)
     sim = compare_string_to_file(pi, "pi.txt")
     print(f"Similarity: {sim}")
-    #print(f"Loops: {loops}")
+    print(f"Loops: {loops}")
     print(f"Precision: {precision}")
-    print(f"time: {end-start}")
+    print(f"time: {runtime}")
     print(f"calculated pi: {pi[:sim]}")
     write_to_file(pi)
     # pi = str(pi)
