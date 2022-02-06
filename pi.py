@@ -2,13 +2,11 @@
 # pi/4 = 1-(1/3)+(1/5)-(1/7)+(1/9)
 
 from decimal import Decimal as d, getcontext as gc
-from sqlite3 import SQLITE_UPDATE
 import time
-import pandas as pd
 import random
 
 def write_to_file(content: str) -> None:
-    f = open("test.txt", "w")
+    f = open("calculated_pi.txt", "w")
     f.write(content)
     f.close()
 
@@ -89,8 +87,7 @@ def montecarlo(loops: int) -> d():
     square_points += 1
     print(f"Of {square_points} points in the square, {circle_points} were inside the circle")
     pi = d(circle_points)/d(square_points)
-    pi = 4 * pi
-    #pi = d(4) * d(pi)
+    pi = d(4) * d(pi)
     print(pi)
     return pi
 
@@ -109,31 +106,42 @@ def montecarlo_unlim() -> d():
     print(f"Of {square_points} points in the square, {circle_points} were inside the circle")
     pi = d(circle_points) / d(square_points)
     pi = d(4) * d(pi)
-    return pi
+    return pi, square_points
 
 
 if __name__ == '__main__':
-    #gc().prec = 20000
-    #loop = int(input("Input number of calculations: "))
-    loop = 10000000  #for runtime testing amount of loops stay same
-    loop = 100000
+    loop = 0
+    method = input("Input calculation type(Nilakantha(better) or Monte Carlo): ")
+    strloop = input("Input number of calculations(0 runs until Ctrl-C): ")
+    try:
+        loop = int(strloop)
+    except ValueError:
+        print("Selected unlimited mode, end with Ctrl-C")
+    method = method[0].lower()
 
-    precision = 50
+    precision = 500
     gc().prec = precision
 
     start = time.time()
-    #pi = nilakantha(loop)
-    #pi = montecarlo(loop)
-    pi = montecarlo_unlim()
-    #pi, loop = nilakantha_unlim()
+    if method == "n":
+        if loop == 0:
+            pi, loop = nilakantha_unlim()
+        else:
+            pi = nilakantha(loop)
+    elif method == "m":
+        if loop == 0:
+            pi, loop = montecarlo_unlim()
+        else:
+            pi = montecarlo(loop)
     end = time.time()
     runtime = end - start
     runtime = str(runtime)
     pi = str(pi)
     sim = compare_string_to_file(pi, "pi.txt")
-    print(f"Similarity: {sim}")
+    print(f"Accuracy in digits: {sim-2}")
     print(f"Loops: {loop}")
     print(f"Precision: {precision}")
-    print(f"time: {runtime}")
-    print(f"calculated pi: {pi[:sim]}")
-    write_to_file(pi)
+    print(f"Time: {runtime}")
+    print(f"Calculated pi: {pi[:sim]}")
+    write_to_file(pi[:sim])
+    print(f"Calculated pi was written to calculated_pi.txt")
