@@ -38,22 +38,26 @@ def nilakantha_unlim():
     try:
         switch = True
         i = 0
+        loops = 0
+        stopafter = 100000
         while True:
-            prod = base * (base +1) * (base +2)
-            if switch:
-                pi += d(4) / d(prod)
-            else:
-                pi -= d(4) / d(prod)
-            switch = not switch
-            base += 2
-            if i >= 1000:
-                sim = compare_string_to_file(str(pi),"pi.txt")
-                sim -= 2
-                print(f"pi accuracy currently at: {sim}")
+            for i in range(stopafter):
+                prod = base * (base +1) * (base +2)
+                if switch:
+                    pi += d(4) / d(prod)
+                else:
+                    pi -= d(4) / d(prod)
+                switch = not switch
+                base += 2
+            sim = compare_string_to_file(str(pi),"pi.txt")
+            sim -= 2
+            loops += stopafter
+            print(f"pi accuracy currently at: {sim} | loops: {loops}")
 
     except KeyboardInterrupt:
-        print("Stopped")
-        return pi
+        print("Stopped by Keyboard")
+
+    return pi, loops
 
 
 
@@ -71,49 +75,6 @@ def compare_string_to_file(string: str, filename: str) -> int:
         prec += 1
     return prec-1
 
-def calcpi_switch(loop:int, precision: int, lastsim: int, incrloops: Boolean):
-    '''
-        Increase pi precison by alternating between increasing decimal precision
-        and increasing amount of loops
-    '''
-    start = time.time()
-
-    gc().prec = precision
-    pi = nilakantha(loop)
-
-    end = time.time()
-    pi = str(pi)
-    runtime = end - start
-    sim = compare_string_to_file(pi,"pi.txt")
-
-    if sim == lastsim:
-        incrloops = not incrloops
-    if sim > lastsim:
-        s = f"Increased similarity to: {sim} by raising: "
-        if incrloops:
-            s += "Loops"
-        else:
-            s += "Precision"
-        print(s)
-    elif sim < lastsim:
-        raise ValueError('Similarity is not supposed to lower')
-    if incrloops:
-        loop = loop * 1.5
-        loop = int(loop)
-    else:
-        precision = precision * 1.1
-        precision = int(precision)
-    return pi, sim, runtime
-    
-def calcpi_loop(loop:int):
-    start = time.time()
-    pi = nilakantha(loop)
-    end = time.time()
-    pi = str(pi)
-    runtime = end - start
-    sim = compare_string_to_file(pi,"pi.txt")
-    return pi, sim, runtime
-
 if __name__ == '__main__':
     #gc().prec = 20000
     #loop = int(input("Input number of calculations: "))
@@ -121,35 +82,20 @@ if __name__ == '__main__':
 
     precision = 500
     gc().prec = precision
-    loop = 100
-    lastsim = 0
-    no_increase_rounds = 0
+    start = time.time()
 
-    incrloops = True # True increases loop amount, False increases precision
-    try:
-        while True:
-            pi, sim, runtime = calcpi_loop(loop)
-            loop = int(loop * 1.2)
-            if sim > lastsim:
-                no_increase_rounds = 0
-                print(f"Similartiy now at: {sim}")
-            elif sim == lastsim:
-                no_increase_rounds += 1
-            if no_increase_rounds >= 2:
-                print(f"Similarity not increasing after increasing loop amoint")
-                precision = int(precision * 1.1)
-            lastsim = sim
-            
-    except KeyboardInterrupt:
-        print("Stopped")
-        pass
-
-
+    #pi = nilakantha(10000000)
+    pi, loops = nilakantha_unlim()
+    end = time.time()
+    pi = str(pi)
+    sim = compare_string_to_file(pi, "pi.txt")
     print(f"Similarity: {sim}")
-    print(f"Loops: {loop}")
+    #print(f"Loops: {loops}")
     print(f"Precision: {precision}")
+    print(f"time: {end-start}")
+    print(f"calculated pi: {pi[:sim]}")
+    write_to_file(pi)
     # pi = str(pi)
-    # write_to_file(pi)
 
     #print(str(pi)[:100])
     #print(f"Runtime: {end - start}")
